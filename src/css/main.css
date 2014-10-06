@@ -157,3 +157,10 @@ li {
   opacity: 0.5;
   z-index: 25;
 }
+
+#badge {
+  position: absolute;
+  top: 0px;
+  right: 20px;
+  z-index: 40;
+}
