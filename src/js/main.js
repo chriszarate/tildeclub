@@ -76,7 +76,7 @@ var frameActions = {
     var page = entry.homepage || eatListBackup[0].homepage;
     var time = entry.modtime || eatListBackup[0].modtime;
     var user = entry.username || 'nobody';
-    var userLink = '<a href="/~' + user + '/">' + user + '</a>';
+    var userLink = '<a href="/~' + user + '/">~' + user + '</a>';
     var iframe = '<iframe src="' + page + '" scrolling="no"></iframe>';
 
     $ondeck = $(iframe).addClass('website ondeck');
