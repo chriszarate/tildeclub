@@ -1,0 +1,172 @@
+<html>
+<head>
+<title>zarate's tilde.club page</title>
+<style>
+body { font-smooth: never; -webkit-font-smoothing: none; }
+</style>
+</head>
+<body bgcolor="#EEEEEE">
+
+<h1>Chris Zarate</h1>
+
+<p>
+I have made many Web pages in my day and this is one of them. Another
+one is <a href="http://chris.zarate.org">this one</a>.
+</p>
+
+<p>
+Maybe soon I will learn about some of the new
+<abbr title="HyperText Markup Language">HTML</abbr> tags like
+<code>&lt;picture&gt;</code> and use them here.
+</p>
+
+<p>
+<a href="mailto:chris@zarate.org">Send me e-mail</a> if you want.
+</p>
+
+<hr>
+
+<h3>JSONP-DB for Tilde Club Members</h3>
+
+<p>
+Please use <a href="dynamic.html">my JSONP database server</a> to store/retrieve
+JSON. That's what's going on with that business below.
+</p>
+
+<hr>
+
+<h3>Suggest a book</h3>
+
+<p>
+I like fiction but you can suggest whatever you like.
+</p>
+
+<form>
+
+<h4>Your name (optional)</h4>
+<p><input id="name" type="text" size="50"></p>
+
+<h4>Your suggestion</h4>
+<p><input id="book" type="text" size="50"></p>
+<p><input id="button" type="button" value="Suggest"></p>
+
+</form>
+
+<hr>
+
+<h3>Suggestions so far</h3>
+
+<ul id="suggestions">
+Loading suggestions from database server....
+</ul>
+
+<h3>Hacks so far</h3>
+
+<ul id="hacks">
+Loading hacks from database server....
+</ul>
+
+<hr>
+
+<!-- Begin Tilde Club Badge -->
+<center>
+<p><a href="http://tilde.club"><img src="http://tilde.club/~zarate/tildeclub.gif"  border="0" width="88" height="31" alt="Tilde Club Badge"></a></p>
+</center>
+<!-- End Tilde Club Badge -->
+
+<center>
+<p>
+<small><a href="badge.html">Add the Tilde Club Badge to your page</a>
+</small>
+</p>
+</center>
+
+<!-- Begin Tilde.Club Ring Fragment-->
+<center>
+<font size="2">
+<br><img src="http://tilde.club/~harper/webring.png"  border="0" usemap="#notepad.map"><br>
+<br>
+Click for the [
+<a href="http://tilde.club/~harper/link.html?action=random" target="_top">Random page</a> ]
+<br>
+Want to join the ring? Click here for
+<a href="http://tilde.club/~harper/link.html?action=info" target="_top">info</a>.
+<br></font>
+<map name="notepad.map">
+<area shape="rect" coords="0, 0, 60, 70" target="_top" href="http://tilde.club/~harper/link.html?action=join">
+<area shape="rect" coords="130, 0, 417, 75" target="_top" href="http://tilde.club/~harper/link.html?action=random">
+<area shape="rect" coords="465, 0, 549, 75" target="_top" href="http://tilde.club/~harper/link.html?action=join">
+</map>
+</center>
+<!-- End Webring Fragment-->
+
+<script>
+
+var storeSuggestionInTheCloudWhateverThatIs = function (suggestion, name) {
+  var sanitizedSuggestion = suggestion.replace(/\"/g, '&quot;'); // shrug emoji
+  var sanitizedName = name.replace(/\"/g, '&quot;');
+  var record = '{"book":"' + sanitizedSuggestion + '","name":"' + sanitizedName + '","date":"' + new Date().getTime() + '"}';
+  var databaseInTheSky = 'http://tilde-club-db.appspot.com/put/buckets/zarate-books/' + record + '?callback=whatsacallback';
+  var script = document.createElement('script');
+  script.src = databaseInTheSky;
+  document.head.appendChild(script);
+};
+
+var getAllSuggestionsFromTheCloud = function () {
+  var databaseInTheSky = 'http://tilde-club-db.appspot.com/get/buckets/zarate-books/?callback=callbackiswhat';
+  var script = document.createElement('script');
+  script.src = databaseInTheSky;
+  document.head.appendChild(script);
+};
+
+var whatsacallback = function () {
+  document.getElementById('book').value = '';
+  document.getElementById('suggestions').innerHTML = 'Updating suggestions from database server....';
+  getAllSuggestionsFromTheCloud();
+  alert('Thanks! I will try to read that.');
+};
+
+var callbackiswhat = function (suggestions) {
+  var suggestionText = '';
+  var hackText = '';
+  for (var i = 0; i < suggestions.length; i++) {
+    var name = suggestions[i].name || 'Anonymous';
+    var suggestion = suggestions[i].book;
+    if (isHack(name + suggestion)) {
+      hackText += '<li><code>' + unHack(suggestion) + '</code> suggested by <code>' + unHack(name) + '</code></li>';
+    } else {
+      suggestionText += '<li><em><strong>' + unHack(suggestion) + '</strong></em> suggested by ' + unHack(name) + '</li>';
+    }
+  }
+  document.getElementById('suggestions').innerHTML = suggestionText;
+  document.getElementById('hacks').innerHTML = hackText;
+};
+
+var isHack = function (str) {
+  var hackTest = new RegExp('(<([^>]+)>)', 'i');
+  var xkcdTest = new RegExp('; (drop|show)', 'i');
+  var entityTest = new RegExp('&(rtl|rlm);', 'i');
+  return hackTest.test(str) || xkcdTest.test(str) || entityTest.test(str);
+};
+
+var unHack = function (str) {
+  return str.replace(/\&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+};
+
+document.getElementById('button').onclick = function () {
+  var suggestion = document.getElementById('book').value;
+  var name = document.getElementById('name').value;
+  if (suggestion.replace(/\s/g, '') === '') {
+    alert('Please provide a book suggestion.');
+  } else {
+    storeSuggestionInTheCloudWhateverThatIs(suggestion, name);
+  }
+  return false;
+};
+
+getAllSuggestionsFromTheCloud();
+
+</script>
+
+</body>
+</html>

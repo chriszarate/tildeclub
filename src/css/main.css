@@ -1,0 +1,159 @@
+/* Body */
+
+html {
+  height: 100%;
+}
+
+body {
+
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  color: #000;
+  background-color: #fff;
+
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1em;
+
+  line-height: 1.4em;
+
+}
+
+
+/* Links */
+
+a {
+  color: #000;
+}
+
+
+/* Headers */
+
+h1, h2, h3, h4 {
+  margin: 2em 0 1em 0;
+}
+
+
+/* YETI */
+
+#hungry {
+  position: relative;
+  width: 820px;
+  height: 100%;
+  min-height: 558px;
+  margin: 0 auto;
+}
+
+h1 {
+  position: absolute;
+  width: 100%;
+  top: 20px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: #0ff;
+  z-index: 20;
+}
+
+ul {
+  position: absolute;
+  width: 100%;
+  margin: 0;
+  padding: 0.5em 0;
+  bottom: 0;
+  list-style: none;
+  text-align: center;
+  font-weight: bold;
+  background-color: #0f0;
+  z-index: 150;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+#yeti {
+  position: absolute;
+  bottom: 25px;
+  left: 0px;
+  width: 400px;
+  height: 533px;
+  border: none;
+  z-index: 100;
+}
+
+#yeti-preload {
+  display: none;
+}
+
+.website {
+  position: absolute;
+  bottom: 83px;
+  right: 20px;
+  width: 400px;
+  height: 404px;
+  background-color: #fff;
+  border: solid 3px #f0f;
+  z-index: 75;
+  overflow: hidden;
+  transition: all 0.2s ease-in;
+  transform-origin: 0 0;
+}
+
+#label {
+  display: none;
+  position: absolute;
+  bottom: 83px;
+  right: 20px;
+  width: 406px;
+  color: #000;
+  text-align: center;
+  background-color: #f0f;
+  z-index: 80;
+}
+
+.grasped {
+  bottom: 83px;
+  right: 170px;
+  transform: scale(0.25);
+}
+
+.lifted {
+  bottom: -25px;
+  right: 187px;
+  transform: rotate(300deg) scale(0.25);
+  transition: all 0.2s ease-in;
+}
+
+.downthehatch {
+  bottom: 165px;
+  right: 177px;
+  transform: rotate(150deg) scale(0.2);
+  transition: all 0.1s ease-in;
+}
+
+.gone {
+  bottom: -100px;
+  right: 237px;
+  transform: rotate(150deg) scale(0);
+  transition: all 0.1s ease-in;
+}
+
+.ondeck {
+  z-index: 50;
+}
+
+.tree {
+  position: absolute;
+  width: 133px;
+  height: 142px;
+  background-image: url('tree.png');
+  background-size: 133px 142px;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+  z-index: 25;
+}

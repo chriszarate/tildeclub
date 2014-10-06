@@ -1,0 +1,156 @@
+<html>
+<head>
+<title>JSONP-DB</title>
+<style>
+body { font-smooth: never; -webkit-font-smoothing: none; }
+</style>
+</head>
+<body bgcolor="#EEEEEE">
+
+<h1>JSONP-DB for Tilde Club</h1>
+
+<p>
+Hi my name is Chris, my home page is <a href="index.html">here</a>.
+</p>
+
+<p>
+I set up a thing so you can store/retrieve JSON on your page. Use it for
+whatever you want. This is a tweaked implementation of
+<a href="https://github.com/davidedc/jsonp-db-redux">JSONP-DB-Redux</a>.
+</p>
+
+<hr>
+
+<h3>Storing data</h3>
+
+<p>
+<strong>Note:</strong> adding the same object twice will result in two entries
+(with the same content) with two different keys.
+</p>
+
+<p>
+<b>Example:</b>
+<br>
+<code>http://tilde-club-db.appspot.com/put/buckets/myFoo/{"foo":"bar","baz":9}?callback=myFunction</code>
+</p>
+
+<p>
+<b>Response:</b>
+<br>
+<code>myFunction('agNpZWRyDQsSB2NvbnRhY3QYAQw');</code> <small> (item key is unique to this object)</small>
+</p>
+
+
+<h3>Retrieve by item key</h3>
+
+<p>
+  <b>Example:</b>
+<br>
+<code>http://tilde-club-db.appspot.com/get/keys/agNpZWRyDQsSB2NvbnRhY3QYAQw?callback=myFunction</code>
+</p>
+
+<p>
+  <b>Response:</b>
+<br>
+<code>myFunction({"foo":"bar","baz":9});</code>
+  </p>
+
+
+<h3>Retrieve all items in a bucket</h3>
+
+<p>
+  <b>Example:</b>
+<br>
+  <code>http://tilde-club-db.appspot.com/get/buckets/myFoo/?callback=myFunction</code>
+</p>
+
+<p>
+  <b>Response:</b>
+<br>
+  <code>myFunction([{"foo":"bar","baz":9},{"foo":"bar2","baz":10}]);</code>
+  </p>
+
+
+<h3>Retrieve specific items by query (within a bucket)</h3>
+
+<p>
+  <b>Example</b>
+<br>
+  You pass an object - all fields will have to match:
+<br>
+  <code>http://tilde-club-db.appspot.com/get/kind/myFoo/?filter={"foo":"bar2"}&callback=myFunction</code>
+</p>
+
+<p>
+  <b>Response:</b>
+<br>
+  <code>myFunction([{"foo":"bar2","baz":10}]);</code>
+</p>
+
+<hr>
+
+<h3>Sample code</h3>
+
+<h4>Storing data</h4>
+
+<pre><code>var putData = function (data) {
+  var jsonData = JSON.stringify(data)
+  var jsonpURL = 'http://tilde-club-db.appspot.com/put/buckets/my-bucket/' + jsonData + '?callback=myPutCallback';
+  var script = document.createElement('script');
+  script.src = jsonpURL;
+  document.head.appendChild(script);
+};
+
+var myPutCallback = function (id) {
+  alert('Data stored with id: ' + id);
+};
+
+document.getElementById('button').onclick = function () {
+  var text = document.getElementById('text').value.replace(/\"/g, '&quot;'); // shrug emoji;
+  putData({"myText":text});
+  return false;
+};
+</code></pre>
+
+<h4>Retrieving data</h4>
+
+<pre><code>var getData = function () {
+  var jsonpURL = 'http://tilde-club-db.appspot.com/get/buckets/my-bucket/?callback=myGetCallback';
+  var script = document.createElement('script');
+  script.src = jsonpURL;
+  document.head.appendChild(script);
+};
+
+var myGetCallback = function (data) {
+  for (var i = 0; i < data.length; i++) {
+    console.log(data[i]);
+  }
+};
+
+getData();
+</code></pre>
+
+<hr>
+
+<h3>How is the data kept private?</h3>
+
+<p>It super-duper isn't!</p>
+
+<ul>
+<li>Data is sent over the network in unencryped GETs over HTTP</li>
+<li>Data is stored in clear in the datastore</li>
+<li>No user authentication is performed</li>
+<li>Anyone who can guess a bucket name can retrieve the full contents of the bucket</li>
+<li>A "key" contains (with a simple encoding) the name of the bucket the object is in. Hence, any object key can lead to the contents of any other object in the same bucket</li>
+</ul>
+
+<h3>Closing thoughts</h3>
+
+<ul>
+<li>Querying for a set of objects will only work on that object's 1st level parameters.  That means that if you have an object named "contact" you can search based on contact.country but NOT contact.country.city</li>
+<li>The amount of data is limited by how long the URL can be. This <a href="http://www.boutell.com/newfaq/misc/urllength.html">varies by browser</a>.
+<li>Stored objects can't be updated/deleted. This is not for any particular technical reason but rather because of minimalism of the implementation.</li>
+</ul>
+
+</body>
+</html>
