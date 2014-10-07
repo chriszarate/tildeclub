@@ -46,7 +46,7 @@ Animation.prototype = {
 
 var yeti = null;
 
-var jsonURL = 'http://tilde.club/~delfuego/tilde.24h.json';
+var jsonURL = '/~delfuego/tilde.24h.json';
 
 var eatList = [];
 var eatListBackup = [{
