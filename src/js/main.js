@@ -81,7 +81,7 @@ var frameActions = {
 
     $ondeck = $(iframe).addClass('website ondeck');
     $app.append($ondeck);
-    $label.html(userLink + ', ' + moment(time).fromNow()).show();
+    $label.html(userLink + ', ' + moment(time).fromNow());
 
     eatListIndex = eatListIndex + 1;
 
