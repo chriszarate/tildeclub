@@ -82,13 +82,12 @@ var frameActions = {
     var time = entry.modtime || eatListBackup[0].modtime;
     var user = entry.username || 'nobody';
     var userLink = '<a href="/~' + user + '/">~' + user + '</a>';
-    var iframe = '<iframe src="' + page + '" scrolling="no"></iframe>';
 
     if (onlineList.indexOf(user) !== -1) {
       userLink = onlineImg + ' ' + userLink;
     }
 
-    $ondeck = $(iframe).addClass('website ondeck');
+    $ondeck = $website.clone().attr('src', page).addClass('ondeck');
     $app.append($ondeck);
     $label.html(userLink + ', ' + moment(time).fromNow());
 
