@@ -172,3 +172,8 @@ li {
   transform: scaleY(-1) scaleX(-1);
   filter: flipv fliph;
 }
+
+.term {
+  border: none;
+  vertical-align: text-bottom;
+}

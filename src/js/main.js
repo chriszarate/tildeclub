@@ -47,6 +47,7 @@ Animation.prototype = {
 var yeti = null;
 
 var jsonURL = '/~delfuego/tilde.24h.json';
+var onlineURL = '/~gabriel/who.json';
 
 var eatList = [];
 var eatListBackup = [{
@@ -56,12 +57,16 @@ var eatListBackup = [{
 }];
 var eatListIndex = 0;
 
+var onlineList = [];
+
 var spriteURL = 'yeti.png';
 var spriteW = 400;
 var spriteH = 533;
 var spriteIndex = 0;
 
 var tree = '<div class="tree"></div>';
+
+var onlineImg = '<img class="term" src="terminal.gif" height="16" width="16">';
 
 var $app = $('#hungry');
 var $website = $('.website');
@@ -78,6 +83,10 @@ var frameActions = {
     var user = entry.username || 'nobody';
     var userLink = '<a href="/~' + user + '/">~' + user + '</a>';
     var iframe = '<iframe src="' + page + '" scrolling="no"></iframe>';
+
+    if (onlineList.indexOf(user) !== -1) {
+      userLink = onlineImg + ' ' + userLink;
+    }
 
     $ondeck = $(iframe).addClass('website ondeck');
     $app.append($ondeck);
@@ -183,7 +192,20 @@ var addTrees = function () {
   }
 };
 
+var updateOnlineList = function (data) {
+
+  if (data && data.online && data.online instanceof Array) {
+    onlineList = data.online;
+  }
+
+  if (onlineList.indexOf('zarate') !== -1 && eatListIndex === 0) {
+    $label.prepend(onlineImg + ' ');
+  }
+
+};
+
 var startEating = function (data) {
+
   if (typeof data === 'object' && data.pagelist) {
     eatList = $.map(data.pagelist, function (el) {
       return (el.username && el.username === 'zarate') ? null : el;
@@ -210,6 +232,9 @@ var startEating = function (data) {
 };
 
 addTrees();
+
+// Fetch online users.
+$.getJSON(onlineURL, updateOnlineList);
 
 // Fetch recently-updated pages.
 $.getJSON(jsonURL, startEating).fail(startEating);
